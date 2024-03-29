@@ -23,7 +23,7 @@ clear_bss_done:
 	/* hint: you can refer to the memory layout in include/mmu.h */
 	/* set up the kernel stack */
 	/* Exercise 1.3: Your code here. (1/2) */
-	lui sp, 0x8002
+	lui sp, 0x8040
 	ori sp, sp, 0	
 	/* jump to mips_init */
 	/* Exercise 1.3: Your code here. (2/2) */
