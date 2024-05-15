@@ -509,7 +509,7 @@ int sys_read_dev(u_int va, u_int pa, u_int len) {
 		}
 		return 0;
 	}
-	return 0;
+	return -E_INVAL;
 }
 
 void *syscall_table[MAX_SYSNO] = {
