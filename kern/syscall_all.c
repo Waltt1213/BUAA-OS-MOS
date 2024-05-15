@@ -460,8 +460,8 @@ int sys_write_dev(u_int va, u_int pa, u_int len) {
 	if (is_illegal_va_range(va, len)) {
 		return -E_INVAL;
 	}
-	if ((0x180003F8 <= pa && pa + len < 0x18000418) 
-		|| (0x180001F0 <= pa && pa + len < 0x180001F8)) {
+	if ((0x180003F8 <= pa && pa + len <= 0x18000418) 
+		|| (0x180001F0 <= pa && pa + len <= 0x180001F8)) {
 		if (len == 1) {
 			iowrite8(*(uint8_t *) va, pa);
 		} else if (len == 2) {
@@ -496,8 +496,8 @@ int sys_read_dev(u_int va, u_int pa, u_int len) {
 	if (is_illegal_va_range(va, len)) {
 		return -E_INVAL;
 	}
-	if ((0x180003F8 <= pa && pa + len < 0x18000418) ||
-		(0x180001F0 <= pa && pa + len < 0x180001F8)) {
+	if ((0x180003F8 <= pa && pa + len <= 0x18000418) ||
+		(0x180001F0 <= pa && pa + len <= 0x180001F8)) {
 		if (len == 1) {
 			*(uint8_t *) va = ioread8(pa); 
 		} else if (len == 2) {

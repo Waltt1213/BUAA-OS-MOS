@@ -47,6 +47,7 @@ void ide_read(u_int diskno, u_int secno, void *dst, u_int nsecs) {
 
 	// Read the sector in turn
 	while (secno < max) {
+		// debugf("r");
 		temp = wait_ide_ready();
 		// Step 1: Write the number of operating sectors to NSECT register
 		temp = 1;

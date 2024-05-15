@@ -13,7 +13,7 @@ int block_is_free(u_int);
 // Hint: Use 'DISKMAP' and 'BLOCK_SIZE' to calculate the address.
 void *disk_addr(u_int blockno) {
 	/* Exercise 5.6: Your code here. */
-	return DISKMAP + blockno * BLOCK_SIZE;
+	return (void *)DISKMAP + blockno * BLOCK_SIZE;
 }
 
 // Overview:
@@ -145,6 +145,7 @@ int map_block(u_int blockno) {
 	// Hint: Use 'disk_addr' for the virtual address.
 	/* Exercise 5.7: Your code here. (2/5) */
 	try(syscall_mem_alloc(env->env_id, disk_addr(blockno), PTE_D));
+	return 0;
 }
 
 // Overview:
@@ -163,7 +164,7 @@ void unmap_block(u_int blockno) {
 	}
 	// Step 3: Unmap the virtual address via syscall.
 	/* Exercise 5.7: Your code here. (5/5) */
-	try(syscall_mem_unmap(env->env_id, disk_addr(blockno)));
+	syscall_mem_unmap(env->env_id, disk_addr(blockno));
 	user_assert(!block_is_mapped(blockno));
 }
 
