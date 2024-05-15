@@ -11,11 +11,11 @@ int main() {
 	u_int cons = MALTA_SERIAL_DATA;
 	while (1) {
 		if ((r = syscall_read_dev(&c, cons_lsr, 1)) != 0) {
-			debugf("syscall_read_dev is bad\n");
+			debugf("syscall_read_dev is bad1\n");
 		}
 		if (c & MALTA_SERIAL_DATA_READY) {
 			if ((r = syscall_read_dev(&c, cons, 1)) != 0) {
-				debugf("syscall_read_dev is bad\n");
+				debugf("syscall_read_dev is bad2\n");
 			}
 		} else {
 			c = 0;
