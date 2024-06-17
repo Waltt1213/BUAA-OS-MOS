@@ -6,7 +6,7 @@ void touch(char *path) {
     strcpy(temp, path);
     r = create(temp, FTYPE_REG);
     if (r < 0 && r != -E_FILE_EXISTS) {
-        user_panic("touch: cannot touch '<file>': No such file or directory\n");
+        printf("touch: cannot touch '<file>': No such file or directory\n");
     }
 }
 

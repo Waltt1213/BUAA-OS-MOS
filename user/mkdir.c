@@ -30,11 +30,11 @@ void mkdir(char *path) {
     } else {
         r = create(temp, FTYPE_DIR);
         if (r == -E_FILE_EXISTS) {
-            user_panic("mkdir: cannot create directory '<dir>': File exists\n");
+            printf("mkdir: cannot create directory '<dir>': File exists\n");
             return;
         }
         if (r == -E_NOT_FOUND) {
-            user_panic("mkdir: cannot create directory '<dir>': No such file or directory\n");
+            printf("mkdir: cannot create directory '<dir>': No such file or directory\n");
         }
     }
 }
