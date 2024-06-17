@@ -2,7 +2,7 @@
 #include <lib.h>
 
 #define WHITESPACE " \t\r\n"
-#define SYMBOLS "<|>&;()"
+#define SYMBOLS "<|>&;()`"
 
 /* Overview:
  *   Parse the next token from the string at s.
@@ -161,7 +161,7 @@ int parsecmd(char **argv, int *rightpipe) {
 			// utilize 'debugf' to print relevant messages,
 			// and subsequently terminate the process using 'exit'.
 			/* Exercise 6.5: Your code here. (2/3) */
-			if ((r = open(t, O_WRONLY)) < 0) {
+			if ((r = open(t, O_WRONLY | O_TRUNC)) < 0) {
 				debugf("failed to open '%s'\n", t);
 				exit();
 			} else {
@@ -171,6 +171,9 @@ int parsecmd(char **argv, int *rightpipe) {
 				break;
 			}
 			user_panic("> redirection not implemented");
+
+			break;
+		case '`' :
 
 			break;
 		case '|':;

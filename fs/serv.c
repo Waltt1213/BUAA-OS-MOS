@@ -176,6 +176,7 @@ void serve_open(u_int envid, struct Fsreq_open *rq) {
 
 	// Fill out the Filefd structure
 	ff = (struct Filefd *)o->o_ff;
+	
 	ff->f_file = *f;
 	ff->f_fileid = o->o_fileid;
 	o->o_mode = rq->req_omode;
