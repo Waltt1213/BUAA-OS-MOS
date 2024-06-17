@@ -33,12 +33,27 @@ int _gettoken(char *s, char **p1, char **p2) {
 		return 0;
 	}
 
+	if (*s == '#') {
+		return 0;
+	}
+
 	if (strchr(SYMBOLS, *s)) {
 		int t = *s;
 		*p1 = s;
 		*s++ = 0;
 		*p2 = s;
 		return t;
+	}
+
+	if (*s == '\"') {
+		s++;
+		*p1 = s;
+		while (*s && *s != '\"') {
+			s++;
+		}
+		*s++ = 0;
+		*p2 = s;
+		return 'w';
 	}
 
 	*p1 = s;
@@ -70,6 +85,7 @@ int parsecmd(char **argv, int *rightpipe) {
 	while (1) {
 		char *t;
 		int fd, r;
+		//int *child;
 		int c = gettoken(0, &t);
 		switch (c) {
 		case 0:
@@ -81,6 +97,19 @@ int parsecmd(char **argv, int *rightpipe) {
 			}
 			argv[argc++] = t;
 			break;
+		case ';':
+			// if (gettoken(0, &t) != 'w') {
+			// 	debugf("syntax error: ; not followed by word\n");
+			// 	exit();
+			// }
+			*rightpipe = fork();
+			if (*rightpipe == 0) {
+				return argc; 
+			} else {
+				wait(*rightpipe);
+				return parsecmd(argv, rightpipe);
+			}
+			break; 
 		case '<':
 			if (gettoken(0, &t) != 'w') {
 				debugf("syntax error: < not followed by word\n");
@@ -105,9 +134,26 @@ int parsecmd(char **argv, int *rightpipe) {
 
 			break;
 		case '>':
-			if (gettoken(0, &t) != 'w') {
-				debugf("syntax error: > not followed by word\n");
-				exit();
+			if ((r = gettoken(0, &t)) != 'w') {
+				if (r == '>') {
+					if (gettoken(0, &t) != 'w') {
+						debugf("syntax error: >> not followed by word\n");
+						exit();
+					}
+					if ((r = open(t, O_WRONLY | O_APPEND)) < 0) {
+						debugf("failed to open '%s'\n", t);
+						exit();
+					} else {
+						fd = r;
+						dup(fd, 1);
+						close(fd);
+						break;
+					}
+					user_panic(">> redirection not implemented");
+				} else {
+					debugf("syntax error: > not followed by word\n");
+					exit();
+				}
 			}
 			// Open 't' for writing, create it if not exist and trunc it if exist, dup
 			// it onto fd 1, and then close the original fd.

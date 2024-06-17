@@ -651,6 +651,19 @@ int file_open(char *path, struct File **file) {
 }
 
 // Overview:
+// move the file ptr
+int file_seek(struct Filefd *ff, u_int offset) {
+	struct File *f;
+	f = &ff->f_file;
+    if (offset < 0 || offset > f->f_size) {
+        return -E_INVAL; // Invalid offset
+    }
+    struct Fd *fd = (struct Fd*)ff;
+	fd->fd_offset = offset;
+    return 0;
+}
+
+// Overview:
 //  Create "path".
 //
 // Post-Condition:
