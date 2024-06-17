@@ -111,7 +111,7 @@ int fsipc_dirty(u_int fileid, u_int offset) {
 
 // Overview:
 //  Ask the file server to delete a file, given its path.
-int fsipc_remove(const char *path) {
+int fsipc_remove(const char *path, u_int of) {
 	// Step 1: Check the length of 'path' using 'strlen'.
 	// If the length of path is 0 or larger than 'MAXPATHLEN', return -E_BAD_PATH.
 	/* Exercise 5.12: Your code here. (1/3) */
@@ -124,6 +124,7 @@ int fsipc_remove(const char *path) {
 	// Step 3: Copy 'path' into the path in 'req' using 'strcpy'.
 	/* Exercise 5.12: Your code here. (2/3) */
 	strcpy(req->req_path, path);
+	req->req_of = of;
 	// Step 4: Send request to the server using 'fsipc'.
 	/* Exercise 5.12: Your code here. (3/3) */
 	return fsipc(FSREQ_REMOVE, req, 0, 0);
@@ -134,4 +135,16 @@ int fsipc_remove(const char *path) {
 //  blocks in the buffer cache.
 int fsipc_sync(void) {
 	return fsipc(FSREQ_SYNC, fsipcbuf, 0, 0);
+}
+
+// Overview:
+// Ask the file server to create a file or a dictionary, given its path.
+int fsipc_create(const char *path, u_int ftype) {
+	if (strlen(path) == 0 || strlen(path) > MAXPATHLEN) {
+		return -E_BAD_PATH;
+	}
+	struct Fsreq_create *req = (struct Fsreq_create *)fsipcbuf;
+	strcpy(req->req_path, path);
+	req->req_ftype = ftype;
+	return fsipc(FSREQ_CREATE, req, 0, 0);
 }

@@ -24,7 +24,7 @@ int file_create(char *path, struct File **file);
 int file_get_block(struct File *f, u_int blockno, void **pblk);
 int file_set_size(struct File *f, u_int newsize);
 void file_close(struct File *f);
-int file_remove(char *path);
+int file_remove(char *path, u_int onlyf);
 int file_dirty(struct File *f, u_int offset);
 void file_flush(struct File *);
 

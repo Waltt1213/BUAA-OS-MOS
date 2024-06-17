@@ -55,7 +55,7 @@ int main() {
 		user_panic("close /newmotd: %d", r);
 	}
 	debugf("file rewrite is good\n");
-	if ((r = remove("/newmotd")) < 0) {
+	if ((r = remove("/newmotd", 0)) < 0) {
 		user_panic("remove /newmotd: %d", r);
 	}
 	if ((r = open("/newmotd", O_RDONLY)) >= 0) {

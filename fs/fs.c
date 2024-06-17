@@ -780,13 +780,17 @@ void file_close(struct File *f) {
 
 // Overview:
 //  Remove a file by truncating it and then zeroing the name.
-int file_remove(char *path) {
+int file_remove(char *path, u_int onlyf) {
 	int r;
 	struct File *f;
 
 	// Step 1: find the file on the disk.
 	if ((r = walk_path(path, 0, &f, 0)) < 0) {
 		return r;
+	}
+
+	if (onlyf && f->f_type != FTYPE_REG) {
+		return -E_NOT_REMOVE;
 	}
 
 	// Step 2: truncate it's size to zero.

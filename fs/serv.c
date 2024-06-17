@@ -287,7 +287,7 @@ void serve_remove(u_int envid, struct Fsreq_remove *rq) {
 	// Step 1: Remove the file specified in 'rq' using 'file_remove' and store its return value.
 	int r;
 	/* Exercise 5.11: Your code here. (1/2) */
-	r = file_remove(rq->req_path);
+	r = file_remove(rq->req_path, rq->req_of);
 	// Step 2: Respond the return value to the caller 'envid' using 'ipc_send'.
 	/* Exercise 5.11: Your code here. (2/2) */
 	ipc_send(envid, r, 0, 0);
@@ -334,6 +334,18 @@ void serve_sync(u_int envid) {
 	ipc_send(envid, 0, 0, 0);
 }
 
+void serve_create(u_int envid, struct Fsreq_create *rq) {
+	int r;
+	struct File *f;
+	r = file_create(rq->req_path, &f);
+	if (r < 0) {
+		ipc_send(envid, r, 0, 0);
+		return;
+	}
+	f->f_type = rq->req_ftype;
+	ipc_send(envid, 0, 0, 0);
+}
+
 /*
  * The serve function table
  * File system use this table and the request number to
@@ -342,7 +354,7 @@ void serve_sync(u_int envid) {
 void *serve_table[MAX_FSREQNO] = {
     [FSREQ_OPEN] = serve_open,	 [FSREQ_MAP] = serve_map,     [FSREQ_SET_SIZE] = serve_set_size,
     [FSREQ_CLOSE] = serve_close, [FSREQ_DIRTY] = serve_dirty, [FSREQ_REMOVE] = serve_remove,
-    [FSREQ_SYNC] = serve_sync,
+    [FSREQ_SYNC] = serve_sync,	 [FSREQ_CREATE] = serve_create,
 };
 
 /*
