@@ -9,7 +9,7 @@ void rm(char *path) {
     if (flag['r']) {
         r = remove(temp, 0);
         if (r == -E_NOT_FOUND) {
-            printf("rm: cannot remove '<dir>|<file>': No such file or directory\n");
+            printf("rm: cannot remove '%s': No such file or directory\n", path);
         }
         return;
     }
@@ -20,10 +20,10 @@ void rm(char *path) {
     else {
         r = remove(temp, 1);
         if (r == -E_NOT_FOUND) {
-            printf("rm: cannot remove '<file>': No such file or directory\n");
+            printf("rm: cannot remove '%s': No such file or directory\n", path);
         }
         if (r == -E_NOT_REMOVE) {
-            printf("rm: cannot remove '<dir>': Is a directory\n");
+            printf("rm: cannot remove '%s': Is a directory\n", path);
         }
     }
    
