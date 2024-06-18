@@ -56,6 +56,10 @@ int _gettoken(char *s, char **p1, char **p2) {
 		return 'w';
 	}
 
+	// if (*s == '`') {
+
+	// }
+
 	*p1 = s;
 	while (*s && !strchr(WHITESPACE SYMBOLS, *s)) {
 		s++;
@@ -82,6 +86,7 @@ int gettoken(char *s, char **p1) {
 
 int parsecmd(char **argv, int *rightpipe) {
 	int argc = 0;
+	static int flag = 0;
 	while (1) {
 		char *t;
 		int fd, r;
@@ -174,7 +179,26 @@ int parsecmd(char **argv, int *rightpipe) {
 
 			break;
 		case '`' :
-
+			if (flag) {
+				flag = 0;
+				return argc;
+			}
+			argc--;
+			flag = 1;
+			// int p[2];
+			// pipe(p);
+			// *rightpipe = fork();
+			// if (*rightpipe == 0) {
+			// 	dup(p[0], 0);
+			// 	close(p[0]);
+			// 	close(p[1]);
+			// 	return parsecmd(argv, rightpipe);
+			// } else if (*rightpipe > 0) {
+			// 	dup(p[1], 1);
+			// 	close(p[1]);
+			// 	close(p[0]);
+			// 	return argc;
+			// }
 			break;
 		case '|':;
 			/*
