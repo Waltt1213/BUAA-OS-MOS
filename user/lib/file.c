@@ -246,15 +246,22 @@ int ftruncate(int fdnum, u_int size) {
 
 // Overview:
 //  Delete a file or directory.
-int remove(const char *path) {
+int remove(const char *path, u_int of) {
 	// Call fsipc_remove.
 
 	/* Exercise 5.13: Your code here. */
-	return fsipc_remove(path);
+	return fsipc_remove(path, of);
 }
 
 // Overview:
 //  Synchronize disk with buffer cache
 int sync(void) {
 	return fsipc_sync();
+}
+
+// Overview:
+// Create a file or a dirctionary
+int create(const char *path, u_int ftype) {
+	//debugf("create\n");
+	return fsipc_create(path, ftype);
 }

@@ -97,9 +97,10 @@ int fsipc_map(u_int, u_int, void *);
 int fsipc_set_size(u_int, u_int);
 int fsipc_close(u_int);
 int fsipc_dirty(u_int, u_int);
-int fsipc_remove(const char *);
+int fsipc_remove(const char *, u_int);
 int fsipc_sync(void);
 int fsipc_incref(u_int);
+int fsipc_create(const char *path, u_int ftype);
 
 // fd.c
 int close(int fd);
@@ -115,9 +116,10 @@ int stat(const char *path, struct Stat *);
 // file.c
 int open(const char *path, int mode);
 int read_map(int fd, u_int offset, void **blk);
-int remove(const char *path);
+int remove(const char *path, u_int of);
 int ftruncate(int fd, u_int size);
 int sync(void);
+int create(const char *path, u_int ftype);
 
 #define user_assert(x)                                                                             \
 	do {                                                                                       \
@@ -130,6 +132,7 @@ int sync(void);
 #define O_WRONLY 0x0001	 /* open for writing only */
 #define O_RDWR 0x0002	 /* open for reading and writing */
 #define O_ACCMODE 0x0003 /* mask for above modes */
+#define O_APPEND 0x0008  /* append to the end of the file */
 #define O_CREAT 0x0100	 /* create if nonexistent */
 #define O_TRUNC 0x0200	 /* truncate to zero length */
 
